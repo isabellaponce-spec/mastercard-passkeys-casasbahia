@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastercard Passkeys Certification (CasasBahia) — Thread Documentation</title>
+<style>
+  :root{
+    --bg:#0f1115;
+    --panel:#171a21;
+    --panel-2:#1d212b;
+    --border:#2a2f3a;
+    --text:#e6e8ec;
+    --muted:#9aa3b2;
+    --accent:#5b8cff;
+    --green:#3fb950;
+    --yellow:#d9a23a;
+    --red:#e5534b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+    font-size:15px;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px;}
+  header.doc{
+    border-bottom:1px solid var(--border);
+    padding-bottom:24px;margin-bottom:32px;
+  }
+  .eyebrow{
+    text-transform:uppercase;letter-spacing:.12em;font-size:12px;
+    color:var(--accent);font-weight:600;margin:0 0 8px;
+  }
+  h1{font-size:28px;line-height:1.2;margin:0 0 14px;font-weight:700;}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:13px;}
+  .meta span strong{color:var(--text);font-weight:600;}
+
+  h2{
+    font-size:18px;margin:40px 0 16px;font-weight:700;
+    display:flex;align-items:center;gap:10px;
+  }
+  h2::before{content:"";width:4px;height:18px;background:var(--accent);border-radius:2px;}
+
+  .context{
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:18px 20px;
+  }
+  .context ol{margin:10px 0 0;padding-left:20px;}
+  .context li{margin:6px 0;}
+
+  .people{display:flex;flex-wrap:wrap;gap:10px;}
+  .chip{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:999px;
+    padding:6px 14px;font-size:13px;display:flex;align-items:center;gap:8px;
+  }
+  .chip .role{color:var(--muted);font-size:11px;}
+
+  .thread{display:flex;flex-direction:column;gap:14px;}
+  .msg{
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:16px 18px;
+  }
+  .msg.parent{border-color:var(--accent);background:#161c2b;}
+  .msg-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;}
+  .author{font-weight:700;}
+  .author .badge{
+    font-size:10px;text-transform:uppercase;letter-spacing:.08em;
+    background:var(--accent);color:#fff;border-radius:4px;padding:2px 6px;margin-left:8px;vertical-align:middle;
+  }
+  .ts{color:var(--muted);font-size:12px;white-space:nowrap;}
+  .body p{margin:8px 0;}
+  .body ul{margin:8px 0;padding-left:20px;}
+  .body li{margin:4px 0;}
+  .mention{color:var(--accent);background:rgba(91,140,255,.12);border-radius:4px;padding:0 4px;font-weight:600;}
+  a{color:var(--accent);word-break:break-word;}
+  code{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:5px;
+    padding:1px 6px;font-size:13px;font-family:"SF Mono",Menlo,Consolas,monospace;color:#d6e0ff;
+  }
+  .reactions{margin-top:8px;font-size:12px;color:var(--muted);}
+  .reactions .r{background:var(--panel-2);border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin-right:6px;}
+
+  /* Feedback severity blocks */
+  .fb{margin:14px 0;padding-left:14px;border-left:3px solid var(--border);}
+  .fb.red{border-color:var(--red);}
+  .fb.yellow{border-color:var(--yellow);}
+  .fb.green{border-color:var(--green);}
+  .fb-title{font-weight:700;display:flex;align-items:center;gap:8px;}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none;}
+  .dot.red{background:var(--red);}
+  .dot.yellow{background:var(--yellow);}
+  .dot.green{background:var(--green);}
+
+  /* Action table */
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px;}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+  th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
+  td .owner{color:var(--accent);}
+  .status{font-size:11px;padding:2px 8px;border-radius:999px;font-weight:600;white-space:nowrap;}
+  .status.open{background:rgba(229,83,75,.15);color:#ff8a82;}
+  .status.answered{background:rgba(63,185,80,.15);color:#7ee787;}
+  .status.confirmed{background:rgba(91,140,255,.15);color:#9cb8ff;}
+
+  footer.doc{margin-top:48px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="doc">
+    <p class="eyebrow">Slack Thread Documentation</p>
+    <h1>Mastercard Passkeys Certification — CasasBahia</h1>
+    <div class="meta">
+      <span><strong>Channel:</strong> C0B33CTPCSE</span>
+      <span><strong>Started:</strong> May 11, 2026</span>
+      <span><strong>Last activity:</strong> May 22, 2026</span>
+      <span><strong>Messages:</strong> 1 parent + 10 replies</span>
+      <span><strong>Started by:</strong> Martin Seggewiss</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Context</h2>
+    <div class="context">
+      <p>Martin Seggewiss and Helio Cantelli met with Leo regarding the Mastercard Passkeys certification. CasasBahia is pushing hard to get it done and consistently asks for three things:</p>
+      <ol>
+        <li>Documentation on how the Passkeys standalone solution will be integrated from their end.</li>
+        <li>ETA on when Yuno will finish it and have it certified.</li>
+        <li>Video on the shopper experience.</li>
+      </ol>
+      <p>An alignment email was also sent to Nachito, Leo, Nico Duarte (now at Mastercard) and the local Brazilian contact at Mastercard. The thread then turned into a review of the existing public documentation, with Helio's detailed gap analysis and the team's responses.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Participants</h2>
+    <div class="people">
+      <span class="chip">Martin Seggewiss <span class="role">thread owner</span></span>
+      <span class="chip">Helio Cantelli <span class="role">doc feedback</span></span>
+      <span class="chip">Andres Leonardo Moreno (Leo)</span>
+      <span class="chip">Miguel Santiago Velasquez</span>
+      <span class="chip">Natan Beraldi</span>
+      <span class="chip">Vivi Amezquita <span class="role">mobile SDK</span></span>
+      <span class="chip">Sebas <span class="role">mobile SDK</span></span>
+      <span class="chip">Martin Sanchez</span>
+      <span class="chip">Romel</span>
+      <span class="chip">Aleksandra Todorovic</span>
+      <span class="chip">Emanuel Guiraud (Manu)</span>
+      <span class="chip">Isabella Ponce de Leon</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Full Thread</h2>
+    <div class="thread">
+
+      <!-- Parent -->
+      <article class="msg parent">
+        <div class="msg-head">
+          <span class="author">Martin Seggewiss<span class="badge">parent</span></span>
+          <span class="ts">May 11, 2026 · 13:55</span>
+        </div>
+        <div class="body">
+          <p>Hi all,</p>
+          <p>Helio and I spoke with Leo today regarding the Mastercard Passkeys certification.</p>
+          <p>3 key points that CasasBahia are always pushing from us are:</p>
+          <ul>
+            <li>Documentation on how the Passkeys standalone solution will be integrated from their end.</li>
+            <li>ETA on when we will finish it and have it certified.</li>
+            <li>Video on the shopper experience.</li>
+          </ul>
+          <p>Also I sent an email to <span class="mention">@Nachito</span> <span class="mention">@Leo</span>, Nico Duarte (now MC) and Local Brazilian Contact at MC to align. CasasBahia is pushing a lot to get it done.</p>
+          <p>Any questions lets try to centralize it here.</p>
+        </div>
+      </article>
+
+      <!-- Reply 1 -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Andres Leonardo Moreno (Leo)</span>
+          <span class="ts">May 12, 2026 · 18:06</span>
+        </div>
+        <div class="body">
+          <p><span class="mention">@Martin Seggewiss</span> How are you?</p>
+          <p>I found this documentation, do you have any feedback on it?</p>
+          <p><a href="https://docs.y.uno/docs/payment-features/network-token-authentication">https://docs.y.uno/docs/payment-features/network-token-authentication</a></p>
+        </div>
+      </article>
+
+      <!-- Reply 2 -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Martin Seggewiss</span>
+          <span class="ts">May 13, 2026 · 07:59</span>
+        </div>
+        <div class="body">
+          <p><span class="mention">@Helio Cantelli</span> can you take a look at this point please?</p>
+        </div>
+      </article>
+
+      <!-- Reply 3 - Helio feedback -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Helio Cantelli</span>
+          <span class="ts">May 13, 2026 · 15:04</span>
+        </div>
+        <div class="body">
+          <p><strong>Feedback: docs.y.uno/docs/payment-features/network-token-authentication</strong></p>
+
+          <div class="fb red">
+            <div class="fb-title"><span class="dot red"></span>Missing: Passkey UX flow diagrams (Mastercard SCOF)</div>
+            <ul>
+              <li>Two distinct scenarios need to be shown:
+                <ul>
+                  <li><strong>First-time user:</strong> 3DS challenge &rarr; passkey creation prompt &rarr; cryptogram generated</li>
+                  <li><strong>Returning user (passkey exists):</strong> biometric prompt only, no 3DS, frictionless</li>
+                </ul>
+              </li>
+              <li>Reference: Mastercard SCOF passkey docs + internal CEH Mastercard Payment Passkeys page</li>
+            </ul>
+          </div>
+
+          <div class="fb red">
+            <div class="fb-title"><span class="dot red"></span>Missing: Mobile SDK integration (iOS &amp; Android)</div>
+            <ul>
+              <li>Current doc only shows web JS (<code>window.location.href</code>) — zero mention of native SDKs</li>
+              <li>Mastercard has no native mobile SDK; Yuno uses a WebView wrapper on both platforms</li>
+              <li>Mobile flow uses <code>continuePayment()</code> + a <code>callback_url</code> deeplink (same pattern as C2P passkey)</li>
+              <li>Should be a dedicated mobile section parallel to the web integration section</li>
+            </ul>
+          </div>
+
+          <div class="fb yellow">
+            <div class="fb-title"><span class="dot yellow"></span>Missing: SDK mode coverage</div>
+            <ul>
+              <li>Only shows Headless/Seamless (<code>apiClientPayment</code>) — no mention of Full/Rendered or Lite modes</li>
+              <li>Should clarify which modes support NTA and whether continue action handling differs</li>
+            </ul>
+          </div>
+
+          <div class="fb yellow">
+            <div class="fb-title"><span class="dot yellow"></span>Missing: Passkey binding rules</div>
+            <ul>
+              <li>Passkey is bound to: specific card + specific device + specific browser</li>
+              <li>Switching any one of the three requires creating a new passkey</li>
+              <li>Important for merchants to understand why some returning users still hit 3DS</li>
+            </ul>
+          </div>
+
+          <div class="fb yellow">
+            <div class="fb-title"><span class="dot yellow"></span>Missing: Fallback &amp; error behavior</div>
+            <ul>
+              <li>No mention of what happens on: user cancels, auth fails, session expires</li>
+              <li>Terminal states (CANCELLED, EXPIRED, NOT_AUTHENTICATED) should be documented with webhook status mappings</li>
+            </ul>
+          </div>
+
+          <div class="fb yellow">
+            <div class="fb-title"><span class="dot yellow"></span>Clarification needed: Web action type</div>
+            <ul>
+              <li>Public doc shows <code>REDIRECT_URL</code> + full-page redirect (<code>window.location.href</code>)</li>
+              <li>Internal arch page shows web uses a <strong>popup</strong> (<code>window.open</code>) with postMessage protocol</li>
+              <li>Should clarify: is the merchant surface <code>REDIRECT_URL</code> or <code>SDK_PROVIDER</code>? Or both depending on SDK mode?</li>
+            </ul>
+          </div>
+
+          <div class="fb green">
+            <div class="fb-title"><span class="dot green"></span>Minor</div>
+            <ul>
+              <li>Add sandbox/testing guidance (currently none)</li>
+              <li>Mention passkeys created via SCOF are interoperable with C2P (network-level storage)</li>
+              <li>Document <code>authentication_method</code> field in webhook payload (e.g. <code>FIDO2</code> for passkey, <code>3DS_ACS</code> for 3DS)</li>
+              <li>"Additional networks" line could note Visa passkeys are in progress</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- Reply 4 -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Martin Seggewiss</span>
+          <span class="ts">May 14, 2026 · 14:03</span>
+        </div>
+        <div class="body">
+          <p><span class="mention">@Natan Beraldi</span></p>
+          <div class="reactions"><span class="r">✅ 1</span></div>
+        </div>
+      </article>
+
+      <!-- Reply 5 -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Martin Seggewiss</span>
+          <span class="ts">May 19, 2026 · 13:24</span>
+        </div>
+        <div class="body">
+          <p><span class="mention">@Miguel Velasquez</span> FYI</p>
+          <div class="reactions"><span class="r">👀 1</span></div>
+        </div>
+      </article>
+
+      <!-- Reply 6 -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Martin Seggewiss</span>
+          <span class="ts">May 20, 2026 · 08:11</span>
+        </div>
+        <div class="body">
+          <p><span class="mention">@Emanuel Guiraud (Manu)</span></p>
+        </div>
+      </article>
+
+      <!-- Reply 7 - Miguel response -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Miguel Santiago Velasquez</span>
+          <span class="ts">May 20, 2026 · 11:58</span>
+        </div>
+        <div class="body">
+          <p>Hello <span class="mention">@Helio Cantelli</span></p>
+          <p>You're right. we would need to add all of what you mentioned</p>
+          <ol>
+            <li>For <code>Passkey UX flow diagrams</code> and <code>Passkey binding rules</code> we can't have it now because we could not test because Mastercard has not activated our credentials</li>
+            <li>For SDK mode coverage, yes, We need to add other flows to the docs (it's supported for all flows except secure fields in web)</li>
+            <li>mobile sdk docs are missing <span class="mention">@Vivi Amezquita</span> <span class="mention">@Sebas</span></li>
+            <li>Missing: Fallback &amp; error behavior, <span class="mention">@Leo</span> <span class="mention">@Martin Sanchez</span> do you know the terminal states?</li>
+            <li>Web action type: Yes, it's redirect (SDK_PROVIDER was deprecated from mastercard)</li>
+          </ol>
+          <p>cc <span class="mention">@Romel</span> <span class="mention">@Aleksandra Todorovic</span></p>
+          <div class="reactions"><span class="r">🙏 1</span></div>
+        </div>
+      </article>
+
+      <!-- Reply 8 -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Miguel Santiago Velasquez</span>
+          <span class="ts">May 20, 2026 · 12:19</span>
+        </div>
+        <div class="body">
+          <p>Mastercard said that all devices that support biometry will support SCOF</p>
+        </div>
+      </article>
+
+      <!-- Reply 9 -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Andres Leonardo Moreno (Leo)</span>
+          <span class="ts">May 20, 2026 · 16:14</span>
+        </div>
+        <div class="body">
+          <p><span class="mention">@Miguel Velasquez</span> The status should be the same we manage in 3DS</p>
+        </div>
+      </article>
+
+      <!-- Reply 10 -->
+      <article class="msg">
+        <div class="msg-head">
+          <span class="author">Andres Leonardo Moreno (Leo)</span>
+          <span class="ts">May 22, 2026 · 10:16</span>
+        </div>
+        <div class="body">
+          <p>FYI: <span class="mention">@Isabella Ponce de Leon</span></p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Documentation Gaps &amp; Resolution Status</h2>
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Severity</th><th>Owner / Response</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Passkey UX flow diagrams (first-time vs returning user)</td>
+          <td><span class="dot red"></span> High</td>
+          <td>Blocked: cannot test until Mastercard activates credentials</td>
+          <td><span class="status open">Blocked</span></td>
+        </tr>
+        <tr>
+          <td>Mobile SDK integration (iOS &amp; Android, WebView wrapper)</td>
+          <td><span class="dot red"></span> High</td>
+          <td><span class="owner">Vivi Amezquita, Sebas</span></td>
+          <td><span class="status open">Open</span></td>
+        </tr>
+        <tr>
+          <td>SDK mode coverage (Full/Rendered, Lite, Headless)</td>
+          <td><span class="dot yellow"></span> Medium</td>
+          <td>Confirmed needed. Supported on all flows except secure fields on web</td>
+          <td><span class="status confirmed">To add</span></td>
+        </tr>
+        <tr>
+          <td>Passkey binding rules (card + device + browser)</td>
+          <td><span class="dot yellow"></span> Medium</td>
+          <td>Blocked: cannot test until Mastercard activates credentials</td>
+          <td><span class="status open">Blocked</span></td>
+        </tr>
+        <tr>
+          <td>Fallback &amp; error behavior / terminal states</td>
+          <td><span class="dot yellow"></span> Medium</td>
+          <td><span class="owner">Leo, Martin Sanchez</span> — Leo: status should match what we manage in 3DS</td>
+          <td><span class="status answered">Answered</span></td>
+        </tr>
+        <tr>
+          <td>Web action type (REDIRECT_URL vs SDK_PROVIDER)</td>
+          <td><span class="dot yellow"></span> Medium</td>
+          <td>Resolved: it is redirect. SDK_PROVIDER was deprecated by Mastercard</td>
+          <td><span class="status answered">Resolved</span></td>
+        </tr>
+        <tr>
+          <td>Minor: sandbox guidance, C2P interoperability, authentication_method field, Visa passkeys note</td>
+          <td><span class="dot green"></span> Low</td>
+          <td>Documentation polish</td>
+          <td><span class="status open">Open</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Live Doc Verification (checked May 22, 2026)</h2>
+    <div class="context" style="margin-bottom:16px;">
+      <p>Helio's feedback was written May 13. The public page <a href="https://docs.y.uno/docs/payment-features/network-token-authentication">docs.y.uno/docs/payment-features/network-token-authentication</a> was re-checked on May 22 to see which gaps are still open. The page appears to have been partially updated: the web action type is now explicit, some terminal states were added, and the additional-networks note is present.</p>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Helio's gap</th><th>Current doc state</th><th>Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dot red"></span> Passkey UX flow diagrams (first-time vs returning)</td>
+          <td>Concept mentioned ("future purchases on the same device are frictionless") but no diagrams or step flows.</td>
+          <td><span class="status open">Still missing</span></td>
+        </tr>
+        <tr>
+          <td><span class="dot red"></span> Mobile SDK integration (iOS &amp; Android)</td>
+          <td>Web JavaScript only. No native SDK, WebView, <code>continuePayment()</code> or deeplink content.</td>
+          <td><span class="status open">Still missing</span></td>
+        </tr>
+        <tr>
+          <td><span class="dot yellow"></span> SDK mode coverage</td>
+          <td>Only Headless via <code>apiClientPayment</code> shown. Full/Rendered and Lite not mentioned.</td>
+          <td><span class="status open">Still missing</span></td>
+        </tr>
+        <tr>
+          <td><span class="dot yellow"></span> Passkey binding rules</td>
+          <td>No mention of card + device + browser binding scope.</td>
+          <td><span class="status open">Still missing</span></td>
+        </tr>
+        <tr>
+          <td><span class="dot yellow"></span> Fallback &amp; error behavior</td>
+          <td>Now lists terminal states <code>SUCCEEDED</code>, <code>DECLINED</code>, <code>CANCELLED</code>, <code>EXPIRED</code>. But no fallback logic, no webhook mappings, and Helio's <code>NOT_AUTHENTICATED</code> is not present.</td>
+          <td><span class="status confirmed">Partially addressed</span></td>
+        </tr>
+        <tr>
+          <td><span class="dot yellow"></span> Web action type</td>
+          <td>Now explicit: full-page redirect to <code>redirect.init_url</code> via <code>window.location.href</code>, <code>REDIRECT_URL</code> only. Matches Miguel's "it's redirect, SDK_PROVIDER deprecated".</td>
+          <td><span class="status answered">Resolved</span></td>
+        </tr>
+        <tr>
+          <td><span class="dot green"></span> Sandbox / testing guidance</td>
+          <td>None present.</td>
+          <td><span class="status open">Still missing</span></td>
+        </tr>
+        <tr>
+          <td><span class="dot green"></span> C2P interoperability note</td>
+          <td>Not mentioned.</td>
+          <td><span class="status open">Still missing</span></td>
+        </tr>
+        <tr>
+          <td><span class="dot green"></span> <code>authentication_method</code> webhook field</td>
+          <td>Not documented (no <code>FIDO2</code> / <code>3DS_ACS</code> values).</td>
+          <td><span class="status open">Still missing</span></td>
+        </tr>
+        <tr>
+          <td><span class="dot green"></span> Additional networks (Visa) note</td>
+          <td>Present: "Additional networks will be added as their passkey integrations are productized."</td>
+          <td><span class="status answered">Resolved</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Key Takeaways</h2>
+    <div class="context">
+      <ul>
+        <li><strong>Main blocker:</strong> Mastercard has not yet activated Yuno's credentials, which prevents testing and therefore the UX flow diagrams and binding-rules documentation.</li>
+        <li><strong>Resolved technical points:</strong> The web surface uses a full-page <code>REDIRECT_URL</code> flow (SDK_PROVIDER deprecated by Mastercard), and terminal/error states should mirror the existing 3DS handling.</li>
+        <li><strong>Device support:</strong> Mastercard confirmed all devices that support biometry will support SCOF.</li>
+        <li><strong>Pending owners:</strong> Mobile SDK docs sit with Vivi Amezquita and Sebas; SDK mode coverage still needs to be added across all flows except web secure fields.</li>
+        <li><strong>Commercial driver:</strong> CasasBahia continues pushing for the integration documentation, certification ETA, and shopper-experience video.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="doc">
+    Generated from Slack thread C0B33CTPCSE (parent ts 1778525709.981429). Timestamps shown in the channel's reported timezone (-05). Names mentioned with @ have been resolved from Slack user IDs.
+  </footer>
+
+</div>
+</body>
+</html>
