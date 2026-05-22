@@ -3,318 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Network Token Authentication (Mastercard Passkeys) — Yuno Documentation</title>
+<title>Network Token Authentication (Mastercard Passkeys) — Yuno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0f1115;--panel:#171a21;--panel-2:#1d212b;--border:#2a2f3a;
-    --text:#e6e8ec;--muted:#9aa3b2;--accent:#5b8cff;
-    --green:#3fb950;--yellow:#d9a23a;--red:#e5534b;
-    --code:#0b0d12;
+    --bg:#ffffff;
+    --ink:#14171c;
+    --text:#33383f;
+    --muted:#6b7280;
+    --border:#e9ebee;
+    --panel:#f7f8fa;
+    --brand:#00C389;       /* Yuno green */
+    --brand-deep:#00855e;  /* readable green for links/labels */
+    --green:#047a52;--green-bg:#e4f6ee;
+    --amber:#92600a;--amber-bg:#fdf2dc;
+    --red:#c02d22;--red-bg:#fdeae8;
+    --blue:#2354c7;--blue-bg:#e9f0ff;
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--bg);color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
-    line-height:1.6;font-size:15px;}
-  .layout{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:40px;padding:40px 24px 90px;}
-  nav.toc{position:sticky;top:24px;align-self:start;font-size:13px;max-height:calc(100vh - 48px);overflow:auto;}
-  nav.toc .toc-title{text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--muted);margin:0 0 12px;font-weight:700;}
-  nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:5px 0;border-left:2px solid transparent;padding-left:12px;}
-  nav.toc a:hover{color:var(--text);border-left-color:var(--accent);}
-  main{min-width:0;}
+    font-family:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;font-size:15.5px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 90px;}
+  a{color:var(--brand-deep);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--ink);font-weight:600;}
 
-  .eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--accent);font-weight:600;margin:0 0 8px;}
-  h1{font-size:30px;line-height:1.18;margin:0 0 14px;font-weight:700;}
-  .lead{font-size:16px;color:#cfd4dd;margin:0 0 22px;}
+  .eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:11.5px;color:var(--brand-deep);font-weight:600;margin:0 0 10px;}
+  h1{font-size:30px;line-height:1.18;margin:0 0 12px;font-weight:700;color:var(--ink);letter-spacing:-.01em;}
+  .lead{font-size:16.5px;color:#4b5159;margin:0 0 26px;}
 
-  .status-banner{display:flex;gap:12px;background:rgba(217,162,58,.10);border:1px solid rgba(217,162,58,.4);
-    border-radius:12px;padding:14px 16px;margin:0 0 34px;font-size:14px;}
-  .status-banner .ico{font-size:18px;line-height:1.3;}
-  .status-banner strong{color:#f0c674;}
+  .banner{display:flex;gap:11px;background:var(--amber-bg);border:1px solid #f0d79a;border-radius:12px;
+    padding:14px 16px;margin:0 0 38px;font-size:14px;color:#6b4a0a;}
+  .banner b{color:#7a5208;}
 
-  h2{font-size:21px;margin:42px 0 14px;font-weight:700;padding-top:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-  h2::before{content:"";width:4px;height:20px;background:var(--accent);border-radius:2px;flex:none;}
-  h3{font-size:16px;margin:24px 0 10px;font-weight:700;}
+  h2{font-size:19px;margin:40px 0 12px;font-weight:700;color:var(--ink);
+    display:flex;align-items:center;gap:11px;flex-wrap:wrap;}
+  h2::before{content:"";width:5px;height:19px;background:var(--brand);border-radius:3px;flex:none;}
+  h3{font-size:15px;margin:20px 0 8px;font-weight:600;color:var(--ink);}
   p{margin:10px 0;}
   ul,ol{margin:10px 0;padding-left:22px;}
   li{margin:6px 0;}
-  a{color:var(--accent);}
-  strong{color:#f2f4f8;}
 
-  table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0;}
+  pre{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:13px 15px;overflow-x:auto;margin:12px 0;}
+  pre code{background:none;border:none;padding:0;color:#1f2937;font-size:13px;line-height:1.55;}
+  code{background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:13px;
+    font-family:"Geist Mono","SF Mono",Menlo,Consolas,monospace;color:#0f5d44;}
+  pre code, pre{font-family:"Geist Mono","SF Mono",Menlo,Consolas,monospace;}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0;}
   th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
-  th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
+  th{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
+  tr:last-child td{border-bottom:none;}
 
-  pre{background:var(--code);border:1px solid var(--border);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0;}
-  pre code{background:none;border:none;padding:0;color:#d6e0ff;font-size:13px;line-height:1.5;}
-  code{background:var(--panel-2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:13px;
-    font-family:"SF Mono",Menlo,Consolas,monospace;color:#d6e0ff;}
-
-  /* status badges on headings */
-  .badge{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;border-radius:6px;padding:3px 9px;display:inline-flex;align-items:center;gap:6px;}
+  .badge{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;border-radius:6px;
+    padding:3px 9px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
   .badge .d{width:7px;height:7px;border-radius:50%;}
-  .badge.confirmed{background:rgba(63,185,80,.14);color:#7ee787;} .badge.confirmed .d{background:var(--green);}
-  .badge.pending{background:rgba(217,162,58,.16);color:#f0c674;} .badge.pending .d{background:var(--yellow);}
-  .badge.blocked{background:rgba(229,83,75,.16);color:#ff8a82;} .badge.blocked .d{background:var(--red);}
-  .badge.info{background:rgba(91,140,255,.15);color:#9cb8ff;} .badge.info .d{background:var(--accent);}
+  .badge.confirmed{background:var(--green-bg);color:var(--green);} .badge.confirmed .d{background:var(--green);}
+  .badge.pending{background:var(--amber-bg);color:var(--amber);} .badge.pending .d{background:#d9a23a;}
+  .badge.blocked{background:var(--red-bg);color:var(--red);} .badge.blocked .d{background:var(--red);}
+  .badge.info{background:var(--blue-bg);color:var(--blue);} .badge.info .d{background:var(--blue);}
 
-  /* team-note callouts */
-  .note{border-left:3px solid var(--accent);background:var(--panel);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:14px;}
-  .note.amber{border-left-color:var(--yellow);}
-  .note.red{border-left-color:var(--red);}
-  .note .nlabel{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--muted);margin-bottom:4px;display:block;}
-  .note .who{color:var(--accent);font-weight:600;}
+  .note{border-left:3px solid var(--brand);background:var(--panel);border-radius:0 10px 10px 0;
+    padding:11px 15px;margin:14px 0;font-size:13.5px;color:#4b5159;}
+  .note .who{color:var(--brand-deep);font-weight:600;}
 
-  .summary-section{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:6px 20px 14px;margin-top:18px;}
-  footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;}
-  @media(max-width:820px){.layout{grid-template-columns:1fr;}nav.toc{position:static;max-height:none;}}
+  table.matrix td:first-child{font-weight:500;color:var(--ink);}
+  footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;}
 </style>
 </head>
 <body>
-<div class="layout">
+<div class="wrap">
 
-  <nav class="toc">
-    <p class="toc-title">On this page</p>
-    <a href="#overview">Overview</a>
-    <a href="#solves">What it solves</a>
-    <a href="#benefits">Benefits</a>
-    <a href="#brands">Supported brands</a>
-    <a href="#shopper">Shopper experience</a>
-    <a href="#how">How it works at Yuno</a>
-    <a href="#web">Web integration</a>
-    <a href="#sdk-modes">SDK mode coverage</a>
-    <a href="#mobile">Mobile integration</a>
-    <a href="#binding">Passkey binding rules</a>
-    <a href="#status">Final status & errors</a>
-    <a href="#webhook">Webhook auth method</a>
-    <a href="#c2p">C2P interoperability</a>
-    <a href="#sandbox">Sandbox & testing</a>
-    <a href="#open-items">Open items</a>
-  </nav>
+  <p class="eyebrow">Yuno · Payment Features</p>
+  <h1>Network Token Authentication (Mastercard Passkeys)</h1>
+  <p class="lead">Authenticate card-on-file payments with network passkeys, starting with Mastercard Secure Card on File (SCOF), without integrating network-specific SDKs.</p>
 
-  <main>
-    <p class="eyebrow">Yuno Documentation · Payment Features</p>
-    <h1>Network Token Authentication (Mastercard Passkeys)</h1>
-    <p class="lead">Yuno's unified solution for authenticating card-on-file payments through network passkeys, starting with Mastercard Secure Card on File (SCOF).</p>
+  <div class="banner">
+    <span>⚠️</span>
+    <div><b>Internal draft, not client-ready.</b> Items marked Pending or Blocked still need work. The team must review this and define the sharing process before sending it to a merchant.</div>
+  </div>
 
-    <div class="status-banner">
-      <span class="ico">⚠️</span>
-      <div>
-        <strong>Internal working draft, not client-ready.</strong> This page consolidates the current public documentation with engineering review feedback (May 2026). Sections marked <em>Pending</em> or <em>Blocked</em> still need to be written or validated. The end-to-end process for what we share externally must be reviewed and redefined with the team before this goes to a merchant.
-      </div>
-    </div>
+  <section>
+    <h2>What it is</h2>
+    <p>Network Token Authentication (NTA) turns stored-card payments into tokenized, passkey-authenticated transactions. The shopper authenticates once against the network with a device passkey (biometric), and Yuno handles the cryptography and redirects. It is opt-in per merchant and triggered through standard routing rules, with no change to the payment creation call.</p>
+    <ul>
+      <li><strong>Higher approval rates</strong> and <strong>liability shift</strong> on authenticated transactions.</li>
+      <li><strong>SCA compliance</strong> with lighter friction than standalone 3DS.</li>
+      <li><strong>One integration for every network</strong>, controlled per transaction via routing.</li>
+    </ul>
+    <table>
+      <thead><tr><th>Brand</th><th>Passkey product</th><th>Status</th></tr></thead>
+      <tbody><tr><td>Mastercard</td><td>Secure Card on File (SCOF)</td><td>Supported</td></tr></tbody>
+    </table>
+    <p style="color:var(--muted);font-size:13.5px;">Additional networks (Visa) will be added as their passkey integrations are productized. The shopper flow stays identical across brands.</p>
+  </section>
 
-    <section id="overview">
-      <h2>Overview</h2>
-      <p>Network Token Authentication (NTA) is Yuno's unified solution for authenticating card payments through Network Token Passkeys, the passkey-backed authentication experiences offered by the card networks on top of their tokenization services. It consolidates every network's passkey integration under a single Yuno product, providing merchants with a consistent flow, configuration point, and shopper experience regardless of the underlying network.</p>
-      <p>The purpose of NTA is simple: allow merchants to turn card-on-file payments into authenticated, passkey-backed transactions without integrating network-specific SDKs. Yuno handles the cryptography, redirects, and network-specific plumbing, while the merchant controls when a payment follows the passkey flow through routing rules.</p>
-    </section>
+  <section>
+    <h2>Shopper experience <span class="badge blocked"><span class="d"></span>Diagrams blocked</span></h2>
+    <ul>
+      <li><strong>First-time shopper:</strong> 3DS challenge, then passkey creation, then the transaction is authenticated.</li>
+      <li><strong>Returning shopper:</strong> biometric prompt only. No 3DS, fully frictionless.</li>
+    </ul>
+    <div class="note"><span class="who">Helio &amp; Miguel:</span> Flow diagrams and a shopper-experience video are still pending. They cannot be finalized until Mastercard activates our credentials and we can test.</div>
+  </section>
 
-    <section id="solves">
-      <h2>What the product solves</h2>
-      <p>Card-on-file payments traditionally rely on a stored PAN and, at best, a static CVC re-entry. This often leads to:</p>
-      <ul>
-        <li><strong>Low approval rates:</strong> Issuers treat unauthenticated card-on-file as higher risk.</li>
-        <li><strong>High friction:</strong> Fallbacks usually involve a full 3DS challenge.</li>
-      </ul>
-      <p>Network Token Passkeys address both issues. The transaction is submitted as a network token with a cryptogram, and the shopper authenticates once against the network using a device passkey (biometric or one-time passcode). This results in a transaction that is both tokenized and authenticated, shifting liability where applicable.</p>
-    </section>
+  <section>
+    <h2>How it works at Yuno</h2>
+    <p>NTA runs only when configured. Setup, once per merchant:</p>
+    <ol>
+      <li>Onboard the account in <a href="https://docs.y.uno/docs/security-and-compliance/network-tokens">Network Tokens</a>.</li>
+      <li>Create a connection of type <strong>Network Token Authentication</strong> in the Dashboard.</li>
+      <li>Load 3DS information on the payment provider connection.</li>
+      <li>In routing, place the NTA step <strong>before</strong> the payment provider step.</li>
+    </ol>
+    <p>At runtime, Yuno evaluates routing before authorization. If the route includes the NTA step it triggers the passkey flow; otherwise the payment proceeds as a standard authorization.</p>
+  </section>
 
-    <section id="benefits">
-      <h2>Benefits for the merchant</h2>
-      <ul>
-        <li><strong>Higher authorization approval rates:</strong> Passkey-authenticated transactions carry a strong authentication signal rewarded by issuers.</li>
-        <li><strong>Liability shift:</strong> Fraud liability moves to the issuer on authenticated transactions, reducing chargeback exposure.</li>
-        <li><strong>SCA compliance:</strong> Satisfies Strong Customer Authentication (SCA) requirements with a lighter shopper experience than standalone 3DS.</li>
-        <li><strong>Smoother repeat-purchase experience:</strong> Once a passkey is registered, future purchases on the same device are frictionless and faster.</li>
-        <li><strong>Reduced friction-driven drop-off:</strong> The passkey step is network-hosted and optimized for mobile, cutting abandonment.</li>
-        <li><strong>One integration for every network:</strong> Merchants inherit new network integrations automatically as Yuno onboards them.</li>
-        <li><strong>Merchant-controlled via routing:</strong> Decide exactly when to apply NTA (e.g., per country, amount, payment method, BIN) using standard Yuno routing rules.</li>
-      </ul>
-    </section>
-
-    <section id="brands">
-      <h2>Supported brands</h2>
-      <table>
-        <thead><tr><th>Brand</th><th>Passkey product</th><th>Status</th></tr></thead>
-        <tbody><tr><td>Mastercard</td><td>Secure Card on File (SCOF)</td><td>Supported</td></tr></tbody>
-      </table>
-      <p>Additional networks will be added as their passkey integrations are productized. The merchant-facing flow remains identical across brands.</p>
-      <div class="note">
-        <span class="nlabel">Team note</span>
-        <span class="who">Helio:</span> Visa passkeys are in progress and should be noted here once productized. Mastercard SCOF passkeys are interoperable with Click to Pay because storage happens at the network level (see <a href="#c2p">C2P interoperability</a>).
-      </div>
-    </section>
-
-    <section id="shopper">
-      <h2>Shopper experience <span class="badge blocked"><span class="d"></span>Blocked</span></h2>
-      <p>The passkey experience differs depending on whether the shopper already has a passkey registered for the card on that device.</p>
-      <ul>
-        <li><strong>First-time shopper:</strong> 3DS challenge, then a passkey creation prompt, then the cryptogram is generated for the authenticated transaction.</li>
-        <li><strong>Returning shopper (passkey exists):</strong> biometric prompt only. No 3DS challenge, fully frictionless.</li>
-      </ul>
-      <div class="note red">
-        <span class="nlabel">Team note</span>
-        <span class="who">Helio &amp; Miguel:</span> Flow diagrams for both scenarios and the binding behavior cannot be finalized yet because we could not test, Mastercard has not activated our credentials. References to use once unblocked: Mastercard SCOF passkey docs and the internal CEH Mastercard Payment Passkeys page. A shopper-experience video is also a planned deliverable.
-      </div>
-    </section>
-
-    <section id="how">
-      <h2>How it works at Yuno</h2>
-      <p>Network Token Authentication is <strong>opt-in per merchant</strong> and driven entirely by routing configuration. There is no change to the payment creation call; the passkey flow is triggered based on the routing rules for that specific transaction.</p>
-      <h3>Setup steps</h3>
-      <ol>
-        <li><strong>Onboard in Network Tokens:</strong> Enable your account for <a href="https://docs.y.uno/docs/security-and-compliance/network-tokens">Network Tokens</a>.</li>
-        <li><strong>Create a Network Token Authentication connection:</strong> In the Yuno Dashboard, create a dedicated connection of type <strong>Network Token Authentication</strong>.</li>
-        <li><strong>Load 3DS information:</strong> Ensure the payment provider connection processing the authorization has its 3DS credentials/configuration loaded.</li>
-        <li><strong>Configure routing:</strong> Place the NTA connection as a step that runs <strong>prior</strong> to the payment provider step in your routing configuration.</li>
-      </ol>
-      <h3>Runtime behavior</h3>
-      <ol>
-        <li>When a payment is created, Yuno evaluates the routing rules <strong>before</strong> sending the transaction to the acquirer.</li>
-        <li>If the route includes the Network Token Authentication step, Yuno triggers the passkey flow with the corresponding network.</li>
-        <li>If not, the payment proceeds as a standard card authorization.</li>
-      </ol>
-      <p>Yuno handles routing evaluation, passkey triggering, redirect handling, and returning the authenticated result.</p>
-    </section>
-
-    <section id="web">
-      <h2>Web integration <span class="badge confirmed"><span class="d"></span>Confirmed</span></h2>
-      <p>When NTA is triggered, Yuno surfaces it as a standard <code>REDIRECT_URL</code> continue action. This matches the pattern used by redirect-based APMs, requiring no network-specific frontend code.</p>
-      <div class="note">
-        <span class="nlabel">Team note</span>
-        <span class="who">Miguel:</span> The web surface is a full-page <code>REDIRECT_URL</code>. <code>SDK_PROVIDER</code> was deprecated by Mastercard, so the popup / postMessage variant referenced in older internal pages no longer applies.
-      </div>
-
-      <h3>1. Initialize Yuno</h3>
-      <pre><code>const yuno = await Yuno.initialize(PUBLIC_API_KEY)</code></pre>
-
-      <h3>2. Start the payment client</h3>
-      <pre><code>const apiClientPayment = await yuno.apiClientPayment({
-  country_code: "US",
-  checkout_session: "&lt;CHECKOUT_SESSION&gt;",
-})</code></pre>
-
-      <h3>3. Generate the one-time token</h3>
-      <pre><code>const oneTimeToken = await apiClientPayment.generateToken({
-  checkout_session: "&lt;CHECKOUT_SESSION&gt;",
-  payment_method: {
-    type: "CARD",
-    vaulted_token: "&lt;VAULTED_TOKEN&gt;",
-    card: { detail: { security_code: "123" } },
-  },
-})</code></pre>
-
-      <h3>4. Create the payment</h3>
-      <p>From your backend, call Yuno's <a href="https://docs.y.uno/reference/payments/create-payment">Create Payment</a> endpoint with <code>payment_method.token</code> set to the one-time token. If NTA is triggered, the response contains <code>sdk_action_required: true</code>.</p>
-
-      <h3>5. Get the continue action</h3>
-      <pre><code>const data = await apiClientPayment.getContinuePaymentAction({
+  <section>
+    <h2>Web integration <span class="badge confirmed"><span class="d"></span>Confirmed</span></h2>
+    <p>When NTA is triggered, Yuno surfaces it as a standard <code>REDIRECT_URL</code> continue action, the same pattern as redirect-based APMs. After creating the payment, get the continue action and send the shopper to the network-hosted URL with a full-page redirect:</p>
+    <pre><code>const data = await apiClientPayment.getContinuePaymentAction({
   checkoutSession: "&lt;CHECKOUT_SESSION&gt;",
-})</code></pre>
-      <p><code>data.action</code> will be <code>REDIRECT_URL</code> and <code>data.redirect</code> contains the network-hosted authentication URL:</p>
-      <pre><code>{
-  "action": "REDIRECT_URL",
-  "redirect": {
-    "init_url": "https://...",
-    "success_url": "https://...",
-    "error_url": "https://..."
-  }
-}</code></pre>
+})
 
-      <h3>6. Redirect the shopper</h3>
-      <p>Use a full-page browser redirect to send the shopper to <code>redirect.init_url</code>.</p>
-      <pre><code>if (data.action === "REDIRECT_URL") {
+// data.action === "REDIRECT_URL"
+// data.redirect = { init_url, success_url, error_url }
+
+if (data.action === "REDIRECT_URL") {
   window.location.href = data.redirect.init_url
 }</code></pre>
-      <p>After authentication, the network redirects the shopper back to your site. Use <a href="https://docs.y.uno/docs/webhooks/configure-webhooks">Yuno Webhooks</a> or <a href="https://docs.y.uno/reference/payments/retrieve-payment-by-id">Retrieve Payment by ID</a> to read the final status.</p>
-    </section>
+    <p>After authentication the shopper returns to your site. Read the final status via <a href="https://docs.y.uno/docs/webhooks/configure-webhooks">Webhooks</a> or <a href="https://docs.y.uno/reference/payments/retrieve-payment-by-id">Retrieve Payment by ID</a>. Full token and Create Payment steps are in the <a href="https://docs.y.uno/docs/payment-features/network-token-authentication">integration reference</a>.</p>
+    <div class="note"><span class="who">Miguel:</span> The web surface is a full-page <code>REDIRECT_URL</code>. <code>SDK_PROVIDER</code> was deprecated by Mastercard.</div>
+  </section>
 
-    <section id="sdk-modes">
-      <h2>SDK mode coverage <span class="badge pending"><span class="d"></span>Pending</span></h2>
-      <p>NTA is supported across Yuno SDK integration modes (Headless / Seamless, Full / Rendered, and Lite). The examples above use the Headless / Seamless mode via <code>apiClientPayment</code>.</p>
-      <div class="note amber">
-        <span class="nlabel">Team note</span>
-        <span class="who">Miguel:</span> NTA is supported for all flows except Secure Fields on web. The documentation still needs the other modes added, and should clarify whether continue-action handling differs per mode.
-      </div>
-    </section>
+  <section>
+    <h2>Final status</h2>
+    <p>The flow is asynchronous. Wait for the outcome via webhook or polling. Terminal states are standard Yuno statuses: <code>SUCCEEDED</code>, <code>DECLINED</code>, <code>CANCELLED</code>, <code>EXPIRED</code>.</p>
+  </section>
 
-    <section id="mobile">
-      <h2>Mobile integration (iOS &amp; Android) <span class="badge pending"><span class="d"></span>Pending</span></h2>
-      <p>The current documentation only covers the web JavaScript flow. A parallel mobile section is required.</p>
-      <ul>
-        <li>Mastercard provides no native mobile SDK; Yuno wraps the network-hosted authentication in a <strong>WebView</strong> on both iOS and Android.</li>
-        <li>The mobile flow uses <code>continuePayment()</code> plus a <code>callback_url</code> deeplink to return the shopper to the app, the same pattern as the Click to Pay passkey flow.</li>
-      </ul>
-      <div class="note amber">
-        <span class="nlabel">Team note</span>
-        <span class="who">Miguel (owners: Vivi Amezquita, Sebas):</span> Mobile SDK docs are missing and need to be written by the mobile team.
-      </div>
-    </section>
+  <section>
+    <h2>Still pending before client sharing</h2>
+    <p>Consolidated punch list from the engineering review.</p>
+    <table class="matrix">
+      <thead><tr><th>Item</th><th>Status</th><th>Owner / note</th></tr></thead>
+      <tbody>
+        <tr><td>Passkey UX flow diagrams</td><td><span class="badge blocked"><span class="d"></span>Blocked</span></td><td>Needs Mastercard to activate credentials so we can test</td></tr>
+        <tr><td>Passkey binding rules (card + device + browser)</td><td><span class="badge blocked"><span class="d"></span>Blocked</span></td><td>Why some returning shoppers still see 3DS. Validate when unblocked</td></tr>
+        <tr><td>Sandbox / testing guidance</td><td><span class="badge blocked"><span class="d"></span>Blocked</span></td><td>Same blocker</td></tr>
+        <tr><td>Mobile SDK section (iOS &amp; Android)</td><td><span class="badge pending"><span class="d"></span>Pending</span></td><td>WebView wrapper + <code>continuePayment()</code> + deeplink. Vivi, Sebas</td></tr>
+        <tr><td>SDK mode coverage</td><td><span class="badge pending"><span class="d"></span>Pending</span></td><td>Supported in all modes except Secure Fields on web (Miguel)</td></tr>
+        <tr><td>Fallback &amp; error states</td><td><span class="badge pending"><span class="d"></span>Pending</span></td><td>Same set as 3DS (Leo). Confirm <code>NOT_AUTHENTICATED</code></td></tr>
+        <tr><td>Webhook <code>authentication_method</code> field</td><td><span class="badge pending"><span class="d"></span>Pending</span></td><td><code>FIDO2</code> for passkey, <code>3DS_ACS</code> for 3DS</td></tr>
+        <tr><td>Click to Pay interoperability note</td><td><span class="badge info"><span class="d"></span>To add</span></td><td>Passkeys stored at network level, shared with C2P</td></tr>
+      </tbody>
+    </table>
+  </section>
 
-    <section id="binding">
-      <h2>Passkey binding rules <span class="badge blocked"><span class="d"></span>Blocked</span></h2>
-      <p>A passkey is bound to a specific combination of <strong>card + device + browser</strong>. Switching any one of the three requires creating a new passkey. This explains why some returning shoppers still hit a 3DS challenge instead of the frictionless biometric prompt.</p>
-      <div class="note red">
-        <span class="nlabel">Team note</span>
-        <span class="who">Helio &amp; Miguel:</span> Binding behavior cannot be validated until Mastercard activates our credentials. <span class="who">Miguel:</span> Mastercard confirmed that all devices that support biometry will support SCOF.
-      </div>
-    </section>
+  <footer>
+    Internal working draft based on docs.y.uno, enriched with engineering review feedback (Helio Cantelli, Miguel Velasquez, Leo) from May 2026. Not client-ready until the team reviews it and defines the external sharing process.
+  </footer>
 
-    <section id="status">
-      <h2>Handling the final status &amp; errors <span class="badge pending"><span class="d"></span>Pending</span></h2>
-      <p>The flow is asynchronous. Wait for the outcome via webhook or poll the payment status. Terminal states are standard Yuno statuses (<code>SUCCEEDED</code>, <code>DECLINED</code>, <code>CANCELLED</code>, <code>EXPIRED</code>).</p>
-      <p>Fallback and error behavior still needs to be documented for the cases where the shopper cancels, authentication fails, or the session expires, with each mapped to its terminal state and webhook status.</p>
-      <div class="note amber">
-        <span class="nlabel">Team note</span>
-        <span class="who">Leo:</span> The statuses should be the same set we already manage in 3DS. <span class="who">Open:</span> confirm whether a <code>NOT_AUTHENTICATED</code> state applies here, as it was raised in review but is not yet in the public status list.
-      </div>
-    </section>
-
-    <section id="webhook">
-      <h2>Webhook payload: authentication method <span class="badge pending"><span class="d"></span>Pending</span></h2>
-      <p>The webhook payload should document an <code>authentication_method</code> field so merchants can tell how a transaction was authenticated, for example <code>FIDO2</code> for a passkey and <code>3DS_ACS</code> for a 3DS fallback.</p>
-      <div class="note amber">
-        <span class="nlabel">Team note</span>
-        <span class="who">Helio:</span> Field is not documented today and should be added to the webhook reference.
-      </div>
-    </section>
-
-    <section id="c2p">
-      <h2>Interoperability with Click to Pay (C2P) <span class="badge info"><span class="d"></span>To add</span></h2>
-      <p>Passkeys created via Mastercard SCOF are interoperable with Click to Pay because the passkey is stored at the network level rather than per-merchant. This is worth documenting so merchants understand the cross-product behavior.</p>
-    </section>
-
-    <section id="sandbox">
-      <h2>Sandbox &amp; testing <span class="badge blocked"><span class="d"></span>Blocked</span></h2>
-      <p>The documentation currently has no sandbox or testing guidance. This needs to be added once we can exercise the flow end to end, which is blocked on Mastercard activating our credentials.</p>
-    </section>
-
-    <section id="open-items">
-      <h2>Open documentation items</h2>
-      <p>Punch list from the engineering review, to be completed before this page is shared with a merchant.</p>
-      <div class="summary-section">
-        <table>
-          <thead><tr><th>Item</th><th>Status</th><th>Owner / next step</th></tr></thead>
-          <tbody>
-            <tr><td>Web action type (<code>REDIRECT_URL</code>)</td><td><span class="badge confirmed"><span class="d"></span>Confirmed</span></td><td>Resolved. SDK_PROVIDER deprecated by Mastercard (Miguel)</td></tr>
-            <tr><td>Additional networks note (Visa)</td><td><span class="badge confirmed"><span class="d"></span>Done</span></td><td>Present in Supported brands</td></tr>
-            <tr><td>Passkey UX flow diagrams</td><td><span class="badge blocked"><span class="d"></span>Blocked</span></td><td>Needs testing once Mastercard activates credentials</td></tr>
-            <tr><td>Passkey binding rules</td><td><span class="badge blocked"><span class="d"></span>Blocked</span></td><td>Same blocker as above</td></tr>
-            <tr><td>Sandbox / testing guidance</td><td><span class="badge blocked"><span class="d"></span>Blocked</span></td><td>Same blocker as above</td></tr>
-            <tr><td>Mobile SDK section (iOS &amp; Android)</td><td><span class="badge pending"><span class="d"></span>Pending</span></td><td>Vivi Amezquita, Sebas</td></tr>
-            <tr><td>SDK mode coverage</td><td><span class="badge pending"><span class="d"></span>Pending</span></td><td>Add Full/Rendered + Lite; note Secure Fields web exception</td></tr>
-            <tr><td>Fallback &amp; error behavior</td><td><span class="badge pending"><span class="d"></span>Pending</span></td><td>Leo, Martin Sanchez. Confirm NOT_AUTHENTICATED state</td></tr>
-            <tr><td><code>authentication_method</code> webhook field</td><td><span class="badge pending"><span class="d"></span>Pending</span></td><td>Add to webhook reference</td></tr>
-            <tr><td>C2P interoperability note</td><td><span class="badge info"><span class="d"></span>To add</span></td><td>Document network-level storage behavior</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <footer>
-      Internal working draft. Built from the public page <a href="https://docs.y.uno/docs/payment-features/network-token-authentication">docs.y.uno/docs/payment-features/network-token-authentication</a>, enriched with engineering review feedback (Helio Cantelli, Miguel Velasquez, Andres Leonardo Moreno / Leo) captured in May 2026. Not yet client-ready: the process for external sharing must be reviewed and redefined with the team first.
-    </footer>
-  </main>
 </div>
 </body>
 </html>
